@@ -3,23 +3,68 @@
 # For this reason, we are creating specific dockerfiles, and building the images from them, copying the files in the images
 # instead of mounting them.
 
-
 version: "3.3"
 services:
+  zoo1:
+    image: zookeeper:${ZOO_TAG}
+    container_name: zkn1
+    environment:
+        ZOO_MY_ID: 1
+        ZOO_SERVERS: server.1=0.0.0.0:2888:3888
+
   sd1:
     build:
       context: dockerfiles/
       dockerfile: dockerfile-stardog
-    container_name: pystardog_stardog
+      args:
+        - TAG=${STARDOG_TAG}
+        - NODE_TYPE=node
+    container_name: pystardog_stardog_1
     entrypoint: ["/bin/bash", "-c"]
     command: ["/var/start.sh"]
+    container_name: pystardog_stardog_1
+
+  sd2:
+    build:
+      context: dockerfiles/
+      dockerfile: dockerfile-stardog
+      args:
+          - TAG=${STARDOG_TAG}
+          - NODE_TYPE=node
+    container_name: pystardog_stardog_2
+    entrypoint: ["/bin/bash", "-c"]
+    command: ["/var/start.sh"]
+
+  sdstandby:
+    build:
+      context: dockerfiles/
+      dockerfile: dockerfile-stardog
+      args:
+        - TAG=${STARDOG_TAG}
+        - NODE_TYPE=standby
+    container_name: pystardog_standby_node
+    entrypoint: ["/bin/bash", "-c"]
+    command: ["/var/start-standby.sh"]
 
   sdcache1:
     build:
       context: dockerfiles/
       dockerfile: dockerfile-stardog
+      args:
+        - TAG=${STARDOG_TAG}
+        - NODE_TYPE=cache
     # underscores not allowed for cache target hostnames
     container_name: pystardog-cache-1
+    entrypoint: ["/bin/bash", "-c"]
+    command: ["/var/start.sh"]
+
+  sdlb:
+    build:
+      context: dockerfiles/
+      dockerfile: dockerfile-haproxy
+      args:
+        - TAG=${HAPROXY_TAG}
+    container_name: sdlb
 
   tests:
     build:
@@ -28,6 +73,8 @@ services:
     entrypoint: /bin/bash -c
     command: ["./utils/run_tests.sh"]
     container_name: pystardog_tests
+    depends_on: # This will not wait for container finish, only start (https://docs.docker.com/compose/startup-order/)
+      - sdstandby
 
   # two mysql servers are used instead of one so we can simulate multiple datasources.
   mysql-music:

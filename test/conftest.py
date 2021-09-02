@@ -44,6 +44,16 @@ def cache_target_info():
     }
     return target_info
 
+@pytest.fixture
+def cluster_standby_node_conn_string():
+    standby_conn_string= {
+        #docker-compose sd_standby containername
+        'endpoint': 'http://pystardog_standby_node:5820',
+        'username': 'admin',
+        'password': 'admin'
+    }
+    return standby_conn_string
+
 # Java 291 (packed in the Stardog docker image from 7.6.3+) disabled TLS 1.0 and 1.1 which breaks the MySQL connector:
 # https://www.oracle.com/java/technologies/javase/8u291-relnotes.html
 # ?useSSL=false works around this for testing purposes:

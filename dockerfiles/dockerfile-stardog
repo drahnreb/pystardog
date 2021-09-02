@@ -14,6 +14,7 @@ ARG NODE_TYPE
 COPY --from=base /tmp/mysql-connector-java.jar opt/stardog/server/dbms
 COPY stardog-license-key.bin /var/opt/stardog
 COPY start.sh /var/start.sh
+COPY start-standby.sh /var/start-standby.sh
 
 USER root
 RUN yes stardogpw | passwd stardog
@@ -36,5 +37,7 @@ RUN mkdir ${HOME}/custom_ssh && \
     PidFile ${HOME}/custom_ssh/sshd.pid" > ${HOME}/custom_ssh/sshd_config
 
 
+
+COPY stardog.$NODE_TYPE.properties /var/opt/stardog/stardog.properties
 
 
