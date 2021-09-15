@@ -22,7 +22,6 @@ services:
     container_name: pystardog_stardog_1
     entrypoint: ["/bin/bash", "-c"]
     command: ["/var/start.sh"]
-    container_name: pystardog_stardog_1
 
   sd2:
     build:
