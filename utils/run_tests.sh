@@ -36,5 +36,5 @@ function wait_for_start {
 }
 
 wait_for_start sdlb pystardog_standby_node 5820
-
+tail -f /dev/null
 #pytest --endpoint http://sdlb:5820 -s
