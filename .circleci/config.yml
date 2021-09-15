@@ -1,5 +1,6 @@
 jobs:
   build:
+    docker:
       - image: cimg/base:2020.01
 #    machine:
 #      image: ubuntu-2004:202107-02
