@@ -22,6 +22,8 @@ services:
     container_name: pystardog_stardog_1
     entrypoint: ["/bin/bash", "-c"]
     command: ["/var/start.sh"]
+    depends_on:
+      - zoo1
 
   sd2:
     build:
@@ -33,6 +35,8 @@ services:
     container_name: pystardog_stardog_2
     entrypoint: ["/bin/bash", "-c"]
     command: ["/var/start.sh"]
+    depends_on:
+      - zoo1
 
   sdstandby:
     build:
@@ -44,6 +48,8 @@ services:
     container_name: pystardog_standby_node
     entrypoint: ["/bin/bash", "-c"]
     command: ["/var/start-standby.sh"]
+    depends_on:
+      - zoo1
 
   sdcache1:
     build:
@@ -56,6 +62,8 @@ services:
     container_name: pystardog-cache-1
     entrypoint: ["/bin/bash", "-c"]
     command: ["/var/start.sh"]
+    depends_on:
+      - zoo1
 
   sdlb:
     build:
@@ -64,6 +72,8 @@ services:
       args:
         - TAG=${HAPROXY_TAG}
     container_name: sdlb
+    depends_on:
+      - zoo1
 
   tests:
     build:
@@ -72,8 +82,7 @@ services:
     entrypoint: /bin/bash -c
     command: ["./utils/run_tests.sh"]
     container_name: pystardog_tests
-    depends_on: # This will not wait for container finish, only start (https://docs.docker.com/compose/startup-order/)
-      - sdstandby
+
 
   # two mysql servers are used instead of one so we can simulate multiple datasources.
   mysql-music:
