@@ -17,7 +17,7 @@ jobs:
           command: |
             echo ${pystardog_license} | base64 --decode  > ~/project/dockerfiles/stardog-license-key.bin
 
-     - setup_remote_docker
+      - setup_remote_docker
 
       - run:
           name: Start containers and run tests
