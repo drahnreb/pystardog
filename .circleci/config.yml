@@ -1,6 +1,6 @@
 jobs:
   build:
-    resource_class: medium
+    #resource_class: medium
     docker:
       - image: cimg/base:2020.01
 #    machine:
