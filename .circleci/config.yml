@@ -1,10 +1,11 @@
 jobs:
   build:
+    resource_class: medium
     docker:
       - image: cimg/base:2020.01
 #    machine:
 #      image: ubuntu-2004:202107-02
-    resource_class: medium
+
 
     steps:
       - checkout
