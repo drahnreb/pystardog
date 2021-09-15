@@ -1,8 +1,10 @@
 jobs:
   build:
-    machine:
-      image: ubuntu-2004:202107-02
-    resource_class: large
+    docker:
+      - image: cimg/base:2020.01
+#    machine:
+#      image: ubuntu-2004:202107-02
+    resource_class: medium
 
     steps:
       - checkout
@@ -16,7 +18,7 @@ jobs:
           command: |
             echo ${pystardog_license} | base64 --decode  > ~/project/dockerfiles/stardog-license-key.bin
 
-#     - setup_remote_docker
+     - setup_remote_docker
 
       - run:
           name: Start containers and run tests
